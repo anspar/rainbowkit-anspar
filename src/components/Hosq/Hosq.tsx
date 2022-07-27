@@ -9,7 +9,7 @@ import { ethers } from "ethers";
 import isMobile from "ismobilejs";
 
 import { useHosqRead, useHosqWrite } from "../utils/hooks";
-import "./Hosq.scss";
+import hosqStyles from "./Hosq.css";
 import blockTimes from "../utils/blockTimes";
 
 // const blockTimes = require("../utils/blockTimes.json");
@@ -95,11 +95,12 @@ function PinButton(props: { blocks: number, cid: string, chainId: number, symbol
   const pinErr = ()=>{console.error(error); toast.error("Error submitting pinning request")}
   isError && pinErr()
   return (
-    <div className={`div-flex-column`}>
+    <div className={hosqStyles.div_flex_column}>
       <span className={`as-text-size-xs as-text-dark as-text-bold ${fees.isLoading? 'as-loading': ""}`}>
         Fee {props.symbol || "?"} {ethers.utils.formatEther(fee)}
       </span>
-      <span className={`as-btn-primary as-pointer as-shadow-sm border1rem text-center fill-width ${isLoading? 'as-loading': ""}`}
+      <span className={[`as-btn-primary as-pointer as-shadow-sm ${hosqStyles.text_center} ${isLoading? 'as-loading': ""}`,
+                        hosqStyles.border1rem, hosqStyles.fill_width].join(" ")}
         onClick={() => write()} style={{minWidth: "102px"}}>Pin CID</span>
     </div>
   )
@@ -117,12 +118,12 @@ function HosqPin(props: { cid: string }) {
     dateInput.current.min = new Date().toISOString().substring(0, 10);
   }, [])
   return (
-    <div className="div-space-between fill-width">
-      <div className="div-flex-column">
+    <div className={[hosqStyles.div_space_between, hosqStyles.fill_width].join(" ")}>
+      <div className={hosqStyles.div_flex_column}>
         <span className="as-text-size-xs as-text-dark as-text-bold">
           Select expiration date
         </span>
-        <input className="border1rem as-text-dark as-bg-light as-shadow-sm"
+        <input className={[hosqStyles.border1rem ,"as-text-dark as-bg-light as-shadow-sm"].join(" ")}
           type="date" ref={dateInput} onChange={(e) => { setDate(new Date(e.target.value)) }} />
       </div>
       <PinButton blocks={blocks} cid={props.cid} chainId={chain?.id as number} symbol={chain?.nativeCurrency?.symbol} />
@@ -183,10 +184,10 @@ export function HosqUploadFiles(props: HosqUploadFilesProps) {
     hosqUpload({ files, wrapInDir: files.length > 1, setProgress, setResponse });
   }, [files])
   return (
-    <div className="hosq-upload-div">
+    <div className={hosqStyles.hosq_upload_div}>
       {
         response ?
-          <div className="div-flex-column fill-width">
+          <div className={`${hosqStyles.div_flex_column} ${hosqStyles.fill_width}`}>
             <a target='_blank' href={`${getGateway()}/${response.Hash}`} className="as-text-dark as-text-size-n">
               {isMobile(window.navigator).any ? `${response.Hash.substring(0, 30)}...` : response.Hash}
             </a>
@@ -201,7 +202,7 @@ export function HosqUploadFiles(props: HosqUploadFilesProps) {
 
       <FileUploadComponent callback={setFiles} maxFiles={props.maxFiles} accept={props.accept} />
 
-      <div className="div-space-between fill-width">
+      <div className={[hosqStyles.div_space_between, hosqStyles.fill_width].join(" ")}>
         <span ref={fileSpan} className="as-text-dark as-text-size-n">Noting selected</span>
         {
           files.length > 0 && !response ?

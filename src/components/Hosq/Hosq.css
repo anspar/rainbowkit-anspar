@@ -1,4 +1,4 @@
-.hosq-upload-div{
+.hosq_upload_div{
     position: relative;
     display: flex;
     flex-direction: column;
@@ -10,7 +10,7 @@
     width: 100%;
 }
 
-.div-space-between{
+.div_space_between{
     margin: 0.2rem 0.5rem;
     display: flex;
     justify-content: space-between;
@@ -23,17 +23,17 @@
     padding: 0.2rem;
 }
 
-.div-flex-column{
+.div_flex_column{
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
 }
 
-.text-center{
+.text_center{
     text-align: center;
 }
 
-.fill-width{
+.fill_width{
     width: -webkit-fill-available
 }

@@ -72,7 +72,7 @@ export function Wallet(props: WalletProps) {
     <RainbowKitProvider chains={chains} theme={
       theme
     }>
-      <div className="align-horizontal-center">
+      <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
         {/* <ThemeSwitch /> */}
         <ANS />
         <ConnectButton showBalance={false} />

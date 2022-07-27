@@ -1,9 +1,3 @@
-.align-horizontal-center{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 :root{
     --toastify-toast-background: var(--as-light) !important;
     --toastify-color-light: var(--as-light) !important;
