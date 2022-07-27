@@ -75,7 +75,7 @@
     "dist"
   ],
   "exports": {
-    ".": "./dist"
+    ".": "./dist/cjs/index.js"
   },
   "types": "dist/index.d.ts"
 }
