@@ -1,0 +1,22 @@
+.align-horizontal-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+:root{
+    --toastify-toast-background: var(--as-light) !important;
+    --toastify-color-light: var(--as-light) !important;
+    --toastify-color-dark: var(--as-dark) !important;
+    --toastify-color-info: var(--as-primary) !important;
+    --toastify-color-success: var(--as-success) !important;
+    --toastify-color-warning: var(--as-warning) !important;
+    --toastify-color-error: var(--as-danger) !important;
+    --toastify-text-color-light: var(--as-dark) !important;
+    --toastify-text-color-dark: var(--as-light) !important;
+    --toastify-color-transparent: var(--as-light-dim) !important;
+}
+
+.Toastify__close-button{
+    color: var(--as-dark) !important;
+}

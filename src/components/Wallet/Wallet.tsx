@@ -1,5 +1,5 @@
 import React from "react";
-import "./Wallet.scss";
+import "./Wallet.css";
 import '@rainbow-me/rainbowkit/styles.css';
 import {
   getDefaultWallets,
@@ -77,8 +77,8 @@ export function Wallet(props: WalletProps) {
         <ANS />
         <ConnectButton showBalance={false} />
       </div>
-      <br />
-      <HosqUploadFiles allowPinning/>
+      {/* <br /> */}
+      {/* <HosqUploadFiles allowPinning/> */}
       <ToastContainer autoClose={5000} pauseOnHover closeOnClick newestOnTop={true} position="bottom-center" />
     </RainbowKitProvider>
   </WagmiConfig>

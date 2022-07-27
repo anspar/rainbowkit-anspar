@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import "./ANS.css";
+import ansStyles from "./ANS.css";
 import { useAccount, useNetwork } from "wagmi";
 
 import { get, getGateway, HosqProvider } from "../Hosq/Hosq";
@@ -34,8 +34,8 @@ function ANSElem() {
   }, [])
   const defANS = data? data[0]: ""
   return (
-    <div className={"ans_wallet as-shadow-sm as-bg-light as-btn " + `${ansLoaded ? "" : "as-loading"}`}>
-      <img ref={ans_icon} src={userIconPh} alt="ANS User Image" className="icon"
+    <div className={[ansStyles.ans_wallet, "as-shadow-sm as-bg-light as-btn " + `${ansLoaded ? "" : "as-loading"}`].join(" ")}>
+      <img ref={ans_icon} src={userIconPh} alt="ANS User Image" className={ansStyles.icon}
         onError={(e) => { e.currentTarget.src = userIconPh }} />
       {!isMobile(window.navigator).any ?
         <span ref={ans_name} className="as-text-dark as-text-bold" style={{marginLeft: "0.25rem"}}>
