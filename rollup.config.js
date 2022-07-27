@@ -1,4 +1,4 @@
-import resolve from "@rollup/plugin-node-resolve";
+import {nodeResolve} from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import postcss from "rollup-plugin-postcss";
 import del from "rollup-plugin-delete";
@@ -28,7 +28,7 @@ export default [
     plugins: [
       del({ targets: 'dist/*' }),
       peerDepsExternal(),
-      resolve(),
+      nodeResolve(),
       commonjs(),
       typescript({ tsconfig: "./tsconfig.json" }),
       json(),

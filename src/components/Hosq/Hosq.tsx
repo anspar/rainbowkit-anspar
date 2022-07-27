@@ -10,8 +10,9 @@ import isMobile from "ismobilejs";
 
 import { useHosqRead, useHosqWrite } from "../utils/hooks";
 import "./Hosq.scss";
+import blockTimes from "../utils/blockTimes";
 
-const blockTimes = require("../utils/blockTimes.json");
+// const blockTimes = require("../utils/blockTimes.json");
 
 
 export interface HosqProviderProps {

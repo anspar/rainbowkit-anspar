@@ -1,11 +1,11 @@
 import { CallOverrides } from "ethers";
 import { useContractRead, useContractWrite } from "wagmi"
-const ans_abis = require("./abis/ans_abis.json");
-const hosq_abis = require("./abis/hosq_abis.json");
+import ans_abis from "./abis/ans_abis.json";
+import hosq_abis from "./abis/hosq_abis.json";
 
 const useANSWrite = (chainId: number, functionName: string, args: any[]) => {
     return useContractWrite({
-        addressOrName: ans_abis.ans.networks[chainId],
+        addressOrName: ans_abis.ans.networks[`${chainId}`],
         contractInterface: ans_abis.ans.abi,
         functionName,
         args,
@@ -15,7 +15,7 @@ const useANSWrite = (chainId: number, functionName: string, args: any[]) => {
 
 const useANS1155Write = (chainId: number, functionName: string, args: any[]) => {
     return useContractWrite({
-        addressOrName: ans_abis.a1155.networks[chainId],
+        addressOrName: ans_abis.a1155.networks[`${chainId}`],
         contractInterface: ans_abis.a1155.abi,
         functionName,
         args,
@@ -25,7 +25,7 @@ const useANS1155Write = (chainId: number, functionName: string, args: any[]) => 
 
 const useHosqWrite = (chainId: number, functionName: string, args: any[], overrides?: CallOverrides) => {
     return useContractWrite({
-        addressOrName: hosq_abis.hosq.networks[chainId],
+        addressOrName: hosq_abis.hosq.networks[`${chainId}`],
         contractInterface: hosq_abis.hosq.abi,
         functionName,
         args,
@@ -36,7 +36,7 @@ const useHosqWrite = (chainId: number, functionName: string, args: any[], overri
 
 const useANSRead = (chainId: number, functionName: string, args: any[]) => {
     return useContractRead({
-        addressOrName: ans_abis.ans.networks[chainId],
+        addressOrName: ans_abis.ans.networks[`${chainId}`],
         contractInterface: ans_abis.ans.abi,
         functionName,
         args,
@@ -46,7 +46,7 @@ const useANSRead = (chainId: number, functionName: string, args: any[]) => {
 
 const useANS1155Read = (chainId: number, functionName: string, args: any[]) => {
     return useContractRead({
-        addressOrName: ans_abis.a1155.networks[chainId],
+        addressOrName: ans_abis.a1155.networks[`${chainId}`],
         contractInterface: ans_abis.a1155.abi,
         functionName,
         args,
@@ -56,7 +56,7 @@ const useANS1155Read = (chainId: number, functionName: string, args: any[]) => {
 
 const useHosqRead = (chainId: number, functionName: string, args: any[]) => {
     return useContractRead({
-        addressOrName: hosq_abis.hosq.networks[chainId],
+        addressOrName: hosq_abis.hosq.networks[`${chainId}`],
         contractInterface: hosq_abis.hosq.abi,
         functionName,
         args,

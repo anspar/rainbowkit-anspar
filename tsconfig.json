@@ -14,5 +14,6 @@
     "sourceMap": true,
     "emitDeclarationOnly": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true
   }
 }
