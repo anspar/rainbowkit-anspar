@@ -1,0 +1,39 @@
+.hosq-upload-div{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: var(--as-dark-dim);
+    border-radius: 1rem;
+    border-style: none;
+    width: 100%;
+}
+
+.div-space-between{
+    margin: 0.2rem 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.border1rem{
+    border-radius: 1rem;
+    border-style: none;
+    padding: 0.2rem;
+}
+
+.div-flex-column{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.fill-width{
+    width: -webkit-fill-available
+}
