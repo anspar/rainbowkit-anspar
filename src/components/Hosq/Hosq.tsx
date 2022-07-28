@@ -76,9 +76,9 @@ function FileUploadComponent({ callback, ...props }: any) {
         <Container {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
           <input {...getInputProps()} />
           {isDragAccept ?
-            <p>Drop</p>
+            <p className="as-text-secondary">Drop</p>
             :
-            <p>Drag 'n' drop {props.maxFiles === 1 ? "a file" : "some files"} here, or click to select</p>
+            <p className="as-text-secondary">Drag 'n' drop {props.maxFiles === 1 ? "a file" : "some files"} here, or click to select</p>
           }
         </Container>
       )}
@@ -90,18 +90,18 @@ function PinButton(props: { blocks: number, cid: string, chainId: number, symbol
   const { data, isError, error, isLoading, write, fees } = useHosqPin(props.cid, props.blocks, selectedProviderId, props.chainId)
   const fee = fees.data ? fees.data[0].add(fees.data[1]).toString() : "0"
   // console.log(data, isError, isLoading, ethers.utils.formatEther(fee));
-  const feeErr = ()=>{console.error(fees.error); toast.error("Error getting the provider fee")}
+  const feeErr = () => { console.error(fees.error); toast.error("Error getting the provider fee") }
   fees.isError && feeErr();
-  const pinErr = ()=>{console.error(error); toast.error("Error submitting pinning request")}
+  const pinErr = () => { console.error(error); toast.error("Error submitting pinning request") }
   isError && pinErr()
   return (
     <div className={hosqStyles.div_flex_column}>
-      <span className={`as-text-size-xs as-text-dark as-text-bold ${fees.isLoading? 'as-loading': ""}`}>
+      <span className={`as-text-size-xs as-text-secondary as-text-bold ${fees.isLoading ? 'as-loading' : ""}`}>
         Fee {props.symbol || "?"} {ethers.utils.formatEther(fee)}
       </span>
-      <span className={[`as-btn-primary as-pointer as-shadow-sm ${hosqStyles.text_center} ${isLoading? 'as-loading': ""}`,
-                        hosqStyles.border1rem, hosqStyles.fill_width].join(" ")}
-        onClick={() => write()} style={{minWidth: "102px"}}>Pin CID</span>
+      <span className={[`as-btn-primary as-pointer as-shadow-sm ${hosqStyles.text_center} ${isLoading ? 'as-loading' : ""}`,
+      hosqStyles.border1rem, hosqStyles.fill_width].join(" ")}
+        onClick={() => write()} style={{ minWidth: "102px" }}>Pin CID</span>
     </div>
   )
 }
@@ -120,10 +120,10 @@ function HosqPin(props: { cid: string }) {
   return (
     <div className={[hosqStyles.div_space_between, hosqStyles.fill_width].join(" ")}>
       <div className={hosqStyles.div_flex_column}>
-        <span className="as-text-size-xs as-text-dark as-text-bold">
+        <span className="as-text-size-xs as-text-secondary as-text-bold">
           Select expiration date
         </span>
-        <input className={[hosqStyles.border1rem ,"as-text-dark as-bg-light as-shadow-sm"].join(" ")}
+        <input className={[hosqStyles.border1rem, "as-text-dark as-bg-light as-shadow-sm"].join(" ")}
           type="date" ref={dateInput} onChange={(e) => { setDate(new Date(e.target.value)) }} />
       </div>
       <PinButton blocks={blocks} cid={props.cid} chainId={chain?.id as number} symbol={chain?.nativeCurrency?.symbol} />
@@ -188,7 +188,7 @@ export function HosqUploadFiles(props: HosqUploadFilesProps) {
       {
         response ?
           <div className={`${hosqStyles.div_flex_column} ${hosqStyles.fill_width}`}>
-            <a target='_blank' href={`${getGateway()}/${response.Hash}`} className="as-text-dark as-text-size-n">
+            <a target='_blank' href={`${getGateway()}/${response.Hash}`} className="as-text-secondary as-text-size-n">
               {isMobile(window.navigator).any ? `${response.Hash.substring(0, 30)}...` : response.Hash}
             </a>
             {
@@ -203,7 +203,7 @@ export function HosqUploadFiles(props: HosqUploadFilesProps) {
       <FileUploadComponent callback={setFiles} maxFiles={props.maxFiles} accept={props.accept} />
 
       <div className={[hosqStyles.div_space_between, hosqStyles.fill_width].join(" ")}>
-        <span ref={fileSpan} className="as-text-dark as-text-size-n">Noting selected</span>
+        <span ref={fileSpan} className="as-text-secondary as-text-size-n">Noting selected</span>
         {
           files.length > 0 && !response ?
             <CircularProgress size="30px" thickness={10} isIndeterminate={progress === 100}
@@ -222,16 +222,32 @@ export function isProviderSelected() {
   return selectedProvider !== undefined
 }
 
-export async function get(cid: string, json: boolean = false) {
-  if (!isProviderSelected()) return;
-  let res = await fetch(`${selectedProvider.api_url}/gateway/${cid}`);
-  if (res.status !== 200) {
-    console.error(res);
-    // throw `Get Request From Hosq Provider ${selectedProvider.name} Failed`
-    toast.error(`Failed to request data from '${selectedProvider.name}' provider`)
-    return
-  }
-  return json ? res.json() : res
+export function useGet(cid: string, json: boolean = false) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState<any | undefined>();
+  const [error, setError] = useState<any | undefined>();
+  useEffect(() => {
+    if (!isProviderSelected()) {
+      setError("Provider is not available");
+      return
+    }
+    setIsLoading(true)
+    fetch(`${selectedProvider.api_url}/gateway/${cid}`).then(async (res) => {
+      setIsLoading(false);
+      if (res.status !== 200) {
+        console.error(res);
+        setError(res.status);
+        toast.error(`Failed to request data from '${selectedProvider.name}' provider`)
+        return
+      }
+      setData(json ? ( await res.json()) : res)
+    }).catch((e) => {
+      console.error(e);
+      setIsLoading(false);
+      setError(e)
+    });
+  }, [])
+  return [data, error, isLoading]
 }
 
 export function getGateway() {
