@@ -1,11 +1,12 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import "./Wallet.css";
 import '@rainbow-me/rainbowkit/styles.css';
 import {
-  getDefaultWallets,
   RainbowKitProvider,
   ConnectButton,
-  midnightTheme
+  midnightTheme,
+  connectorsForWallets,
+  wallet
 } from '@rainbow-me/rainbowkit';
 import {
   chain,
@@ -19,12 +20,11 @@ import { ANS } from "../Ans/ANS";
 import "@anspar/anspar-theme/styles.css";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { HosqUploadFiles } from "../Hosq/Hosq";
-
-
 export interface WalletProps {
   alchemyKey?: string;
   testnets?: boolean;
+  children?: ReactNode;
+  classNames?: string;
 }
 
 export function Wallet(props: WalletProps) {
@@ -37,10 +37,14 @@ export function Wallet(props: WalletProps) {
     providers
   );
 
-  const { connectors } = getDefaultWallets({
-    appName: 'Anspar nApp Wallet',
-    chains
-  });
+  const connectors = connectorsForWallets([
+    {
+      groupName: 'Recommended',
+      wallets: [
+        wallet.metaMask({ chains })
+      ],
+    },
+  ]);
 
   const wagmiClient = createClient({
     autoConnect: true,
@@ -72,13 +76,11 @@ export function Wallet(props: WalletProps) {
     <RainbowKitProvider chains={chains} theme={
       theme
     }>
-      <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-        {/* <ThemeSwitch /> */}
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} className={props.classNames}>
         <ANS />
         <ConnectButton showBalance={false} />
       </div>
-      {/* <br /> */}
-      {/* <HosqUploadFiles allowPinning/> */}
+      {props.children}
       <ToastContainer autoClose={5000} pauseOnHover closeOnClick newestOnTop={true} position="bottom-center" />
     </RainbowKitProvider>
   </WagmiConfig>

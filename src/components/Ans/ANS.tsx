@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import ansStyles from "./ANS.css";
+import ansStyles from "./ANS.modules.css";
 import { useAccount, useNetwork } from "wagmi";
 
 import { get, getGateway, HosqProvider } from "../Hosq/Hosq";

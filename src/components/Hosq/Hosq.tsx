@@ -9,7 +9,7 @@ import { ethers } from "ethers";
 import isMobile from "ismobilejs";
 
 import { useHosqRead, useHosqWrite } from "../utils/hooks";
-import hosqStyles from "./Hosq.css";
+import hosqStyles from "./Hosq.modules.css";
 import blockTimes from "../utils/blockTimes";
 
 // const blockTimes = require("../utils/blockTimes.json");
