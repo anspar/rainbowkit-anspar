@@ -17,14 +17,14 @@ import {
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { ANS } from "../Ans/ANS";
-import "@anspar/anspar-theme/styles.css";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 export interface WalletProps {
   alchemyKey?: string;
   testnets?: boolean;
   children?: ReactNode;
-  classNames?: string;
+  className?: string;
 }
 
 export function Wallet(props: WalletProps) {
@@ -76,7 +76,7 @@ export function Wallet(props: WalletProps) {
     <RainbowKitProvider chains={chains} theme={
       theme
     }>
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} className={props.classNames}>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} className={props.className}>
         <ANS />
         <ConnectButton showBalance={false} />
       </div>
