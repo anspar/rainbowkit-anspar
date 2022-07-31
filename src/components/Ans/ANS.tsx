@@ -22,11 +22,11 @@ let selectedANS: any | undefined;
 function ANSElem() {
   let data = getSelectedANS();
   const defANS = data ? data[0] : ""
-  const [details, error, isLoading] = useGet(`${data[1]}/info.json`, true);
+  const details = useGet(`${data[1]}/info.json`, true);
 
   return (
-    <div className={[ansStyles.ans_wallet, "as-shadow-sm as-bg-light as-btn " + `${isLoading ? "as-loading": ""}`].join(" ")}>
-      <img src={details?`${getGateway()}/${data[1]}/${details.image}`:userIconPh} alt="ANS User Image" className={ansStyles.icon}
+    <div className={[ansStyles.ans_wallet, "as-shadow-sm as-bg-light as-btn " + `${details.isLoading ? "as-loading": ""}`].join(" ")}>
+      <img src={details.data?`${getGateway()}/${data[1]}/${details.data.image}`:userIconPh} alt="ANS User Image" className={ansStyles.icon}
         onError={(e) => { e.currentTarget.src = userIconPh }} />
       {!isMobile(window.navigator).any ?
         <span className="as-text-dark as-text-bold" style={{ marginLeft: "0.25rem" }}>

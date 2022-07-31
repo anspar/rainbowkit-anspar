@@ -247,7 +247,7 @@ export function useGet(cid: string, json: boolean = false) {
       setError(e)
     });
   }, [])
-  return [data, error, isLoading]
+  return {data, error, isLoading}
 }
 
 export function getGateway() {

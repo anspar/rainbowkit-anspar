@@ -14,7 +14,7 @@ export default{
 const Template: ComponentStory<typeof WalletContext> = (args) => {
   return (
     <>
-      <ThemeSwitch />
+      <ThemeSwitch style={{width: "30px"}}/>
       <WalletContext {...args} >
         <Wallet />
       </WalletContext>
@@ -33,7 +33,7 @@ Testnets.args = {
 const Template2: ComponentStory<typeof WalletContext> = (args) => {
   return (
     <>
-      <ThemeSwitch />
+      <ThemeSwitch style={{width: "30px"}}/>
       <WalletContext {...args} >
         <Wallet styles={{position: "absolute", top:"2rem", right: "2rem", width: "fit-content", padding: "0.5rem"}} className="as-bg-light"/>
       </WalletContext>

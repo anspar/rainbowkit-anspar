@@ -15,7 +15,7 @@ export default {
 const Template: ComponentStory<typeof HosqUploadFiles> = (args) => {
   return (
     <>
-      <ThemeSwitch />
+      <ThemeSwitch style={{width: "30px"}}/>
       <WalletContext testnets>
         <Wallet />
         <div style={{marginTop: "0.5rem", backgroundColor: "var(--as-light)", padding: "1rem"}}>
