@@ -24,10 +24,9 @@ export interface WalletProps {
   alchemyKey?: string;
   testnets?: boolean;
   children?: ReactNode;
-  className?: string;
 }
 
-export function Wallet(props: WalletProps) {
+export function WalletContext(props: WalletProps) {
   let nets = [chain.mainnet, chain.polygon];
   let providers = [publicProvider()];
   if (props.alchemyKey) providers.push(alchemyProvider({ alchemyId: props.alchemyKey }));
@@ -76,13 +75,18 @@ export function Wallet(props: WalletProps) {
     <RainbowKitProvider chains={chains} theme={
       theme
     }>
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }} className={props.className}>
-        <ANS />
-        <ConnectButton showBalance={false} />
-      </div>
       {props.children}
       <ToastContainer autoClose={5000} pauseOnHover closeOnClick newestOnTop={true} position="bottom-center" />
     </RainbowKitProvider>
   </WagmiConfig>
   );
+}
+
+export function Wallet(props: { className?: string, styles?: React.CSSProperties }) {
+  return (
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", ...props.styles }} className={props.className}>
+      <ANS />
+      <ConnectButton showBalance={false} />
+    </div>
+  )
 }

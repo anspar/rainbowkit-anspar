@@ -3,10 +3,11 @@
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    min-height: 35px;
+    min-height: 36px;
     margin-right: 0.7rem;
     border-radius: 0.7rem;
     padding: 2px 5px;
+    max-width: 100px;
 }
 
 .icon {
