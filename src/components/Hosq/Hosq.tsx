@@ -25,6 +25,7 @@ export interface HosqUploadProps {
   blobs?: [{ blob: Blob, name: string }],
   wrapInDir: boolean,
   setResponse: any,
+  setError?: any,
   setProgress?: Function
 }
 
@@ -162,7 +163,10 @@ export function hosqUpload(data: HosqUploadProps) {
     data: body
   }).then((res) => {
     if (res.status === 200) data.setResponse(res.data);
-    else toast.error("Failed to upload")
+    else {
+      data.setError && data.setError(res)
+      toast.error("Failed to upload")
+    }
   })
 }
 
