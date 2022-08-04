@@ -3,23 +3,25 @@ import { useContractRead, useContractWrite } from "wagmi"
 import ans_abis from "./abis/ans_abis.json";
 import hosq_abis from "./abis/hosq_abis.json";
 
-const useANSWrite = (chainId: number, functionName: string, args: any[]) => {
+const useANSWrite = (chainId: number, functionName: string, args: any[], overrides?: CallOverrides) => {
     return useContractWrite({
         addressOrName: ans_abis.ans.networks[`${chainId}`],
         contractInterface: ans_abis.ans.abi,
         functionName,
         args,
-        chainId
+        chainId,
+        overrides
     })
 }
 
-const useANS1155Write = (chainId: number, functionName: string, args: any[]) => {
+const useANS1155Write = (chainId: number, functionName: string, args: any[], overrides?: CallOverrides) => {
     return useContractWrite({
         addressOrName: ans_abis.a1155.networks[`${chainId}`],
         contractInterface: ans_abis.a1155.abi,
         functionName,
         args,
-        chainId
+        chainId,
+        overrides
     })
 }
 
