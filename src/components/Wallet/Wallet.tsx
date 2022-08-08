@@ -1,6 +1,5 @@
 import React, { ReactNode } from "react";
 import "./Wallet.css";
-import '@rainbow-me/rainbowkit/styles.css';
 import {
   RainbowKitProvider,
   ConnectButton,
@@ -18,7 +17,6 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { ANS } from "../Ans/ANS";
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 export interface WalletProps {
   alchemyKey?: string;

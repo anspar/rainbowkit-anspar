@@ -8,6 +8,8 @@
 In your App.js file add
 
     import "@anspar/anspar-theme/styles.css";
+    import '@rainbow-me/rainbowkit/styles.css'; 
+    import 'react-toastify/dist/ReactToastify.css'; 
 
 ## Find [Examples Here](https://anspar.github.io/ans-wallet)
 
