@@ -6,8 +6,7 @@ import { getGateway, HosqProvider, useGet } from "../Hosq/Hosq";
 import { useANSRead } from "../utils/hooks";
 import isMobile from 'ismobilejs';
 import { toast } from "react-toastify";
-
-const userIconPh = require("../imgs/circle-user-solid.png");
+import userIconPh from "../../imgs/circle-user-solid.png";
 
 export interface ANSProps {
   label?: string;
