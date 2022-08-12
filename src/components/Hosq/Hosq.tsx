@@ -2,13 +2,11 @@ import React, { ReactNode, useEffect, useRef, useState } from "react";
 import Dropzone from "react-dropzone";
 import { toast } from "react-toastify";
 import { useNetwork } from "wagmi";
-import styled from 'styled-components';
 import { CircularProgress, CircularProgressLabel } from "@chakra-ui/progress";
 import axios from "axios";
 import { ethers } from "ethers";
-import isMobile from "ismobilejs";
 
-import { useHosqRead, useHosqWrite } from "../utils/hooks";
+import { useHosqRead, useHosqWrite, useIsMobile } from "../utils/hooks";
 import hosqStyles from "./Hosq.modules.css";
 import blockTimes from "../utils/blockTimes";
 
@@ -38,50 +36,20 @@ export interface HosqUploadFilesProps {
 let selectedProvider: any | undefined;
 let selectedProviderId: number = 0;
 
-const getColor = (props: any) => {
-  if (props.isDragAccept) {
-    return 'var(--as-success)';
-  }
-  if (props.isDragReject) {
-    return 'var(--as-danger)';
-  }
-  if (props.isFocused) {
-    return 'var(--as-secondary)';
-  }
-  return 'transparent';
-}
-
-const Container = styled.div`
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border-width: 2px;
-    border-radius: 1rem;
-    border-color: ${(props: any) => getColor(props)};
-    border-style: dashed;
-    background-color: var(--as-dark-dim);
-    color: var(--as-dark);
-    outline: none;
-    transition: border .24s ease-in-out;
-    width: -webkit-fill-available;
-  `;
-
 function FileUploadComponent({ callback, ...props }: any) {
   return (
     <Dropzone preventDropOnDocument
       onDropAccepted={acceptedFiles => callback(acceptedFiles)}
       maxFiles={props.maxFiles} accept={props.accept}>
       {({ getRootProps, getInputProps, isFocused, isDragAccept, isDragReject }) => (
-        <Container {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
+        <div className={hosqStyles.container} {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
           <input {...getInputProps()} />
           {isDragAccept ?
             <p className="as-text-secondary">Drop</p>
             :
             <p className="as-text-secondary">Drag 'n' drop {props.maxFiles === 1 ? "a file" : "some files"} here, or click to select</p>
           }
-        </Container>
+        </div>
       )}
     </Dropzone>
   )
@@ -175,6 +143,7 @@ export function HosqUploadFiles(props: HosqUploadFilesProps) {
   const [progress, setProgress] = useState(0);
   const [response, setResponse] = useState<any | undefined>();
   const fileSpan: any = useRef();
+  const isMobile = useIsMobile();
   useEffect(() => {
     if (files.length === 0) return;
     let [name, size] = ["", 0];
@@ -193,7 +162,7 @@ export function HosqUploadFiles(props: HosqUploadFilesProps) {
         response ?
           <div className={`${hosqStyles.div_flex_column} ${hosqStyles.fill_width}`}>
             <a target='_blank' href={`${getGateway()}/${response.Hash}`} className="as-text-secondary as-text-size-n">
-              {isMobile(window.navigator).any ? `${response.Hash.substring(0, 30)}...` : response.Hash}
+              {isMobile ? `${response.Hash.substring(0, 30)}...` : response.Hash}
             </a>
             {
               props.allowPinning ?
@@ -244,14 +213,14 @@ export function useGet(cid: string, json: boolean = false) {
         toast.error(`Failed to request data from '${selectedProvider.name}' provider`)
         return
       }
-      setData(json ? ( await res.json()) : res)
+      setData(json ? (await res.json()) : res)
     }).catch((e) => {
       console.error(e);
       setIsLoading(false);
       setError(e)
     });
   }, [])
-  return {data, error, isLoading}
+  return { data, error, isLoading }
 }
 
 export function getGateway() {
@@ -268,7 +237,6 @@ export function HosqProvider({ children, ...props }: HosqProviderProps) {
   useEffect(() => {
     isError && toast.error("Failed to get Hosq provider");
     if (data) {
-      // console.log("Hosq");
       selectedProvider = data;
       selectedProviderId = props.DefaultProviderId ? props.DefaultProviderId : 1;
       setReady(true);

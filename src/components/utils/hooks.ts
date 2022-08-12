@@ -1,4 +1,5 @@
 import { CallOverrides } from "ethers";
+import { useMediaQuery } from "react-responsive";
 import { useContractRead, useContractWrite } from "wagmi"
 import ans_abis from "./abis/ans_abis.json";
 import hosq_abis from "./abis/hosq_abis.json";
@@ -66,4 +67,8 @@ const useHosqRead = (chainId: number, functionName: string, args: any[]) => {
     })
 }
 
-export { useANS1155Read, useANS1155Write, useHosqRead, useHosqWrite, useANSRead, useANSWrite }
+const useIsMobile=()=>{
+    return useMediaQuery({ maxWidth: 767 });
+}
+
+export { useANS1155Read, useANS1155Write, useHosqRead, useHosqWrite, useANSRead, useANSWrite, useIsMobile }

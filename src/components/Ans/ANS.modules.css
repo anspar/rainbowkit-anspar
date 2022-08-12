@@ -1,9 +1,9 @@
 .ans_wallet {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     cursor: pointer;
-    min-height: 36px;
+    min-height: 2.2rem;
     margin-right: 0.7rem;
     border-radius: 0.7rem;
     padding: 2px 5px;

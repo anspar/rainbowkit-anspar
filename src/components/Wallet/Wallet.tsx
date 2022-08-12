@@ -84,7 +84,9 @@ export function Wallet(props: { className?: string, styles?: React.CSSProperties
   return (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", ...props.styles }} className={props.className}>
       <ANS />
-      <ConnectButton showBalance={false} />
+      <ConnectButton showBalance={false} 
+                    chainStatus={{ smallScreen: 'icon', largeScreen: 'full' }}
+                    accountStatus={{smallScreen:"address", largeScreen:"full"}} />
     </div>
   )
 }
