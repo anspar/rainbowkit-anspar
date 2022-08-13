@@ -86,7 +86,7 @@ export function Wallet(props: { className?: string, styles?: React.CSSProperties
       <ANS />
       <ConnectButton showBalance={false} 
                     chainStatus={{ smallScreen: 'icon', largeScreen: 'full' }}
-                    accountStatus={{smallScreen:"address", largeScreen:"full"}} />
+                    accountStatus={{smallScreen: 'avatar', largeScreen:"full"}} />
     </div>
   )
 }
