@@ -1,9 +1,9 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import Dropzone from "react-dropzone";
 import { toast } from "react-toastify";
 import { useNetwork } from "wagmi";
 import { CircularProgress, CircularProgressLabel } from "@chakra-ui/progress";
-import axios from "axios";
+import axios, { CancelToken } from "axios";
 import { ethers } from "ethers";
 
 import { useHosqRead, useHosqWrite, useIsMobile } from "../utils/hooks";
@@ -21,16 +21,16 @@ export interface HosqProviderProps {
 export interface HosqUploadProps {
   files?: File[],
   blobs?: [{ blob: Blob, name: string }],
-  wrapInDir: boolean,
-  setResponse: any,
-  setError?: any,
-  setProgress?: Function
+  wrapInDir?: boolean
 }
 
 export interface HosqUploadFilesProps {
   maxFiles?: number,
   accept?: any,
-  allowPinning?: boolean
+  allowPinning?: boolean,
+  wrapInDir?: boolean,
+  uploadOnDrop?: boolean,
+  onDrop?: (f: File[]) => {}
 }
 
 let selectedProvider: any | undefined;
@@ -110,38 +110,68 @@ export function useHosqPin(cid: string, numberOfBlocks: number, providerId: numb
   }
 }
 
-export function hosqUpload(data: HosqUploadProps) {
-  if (!isProviderSelected()) {
-    toast.error("Hosq provider is not available");
-    return
+export function useHosqUpload(data: HosqUploadProps) {
+  const [progress, setProgress] = useState(0);
+  const [response, setResponse] = useState<any | undefined>();
+  const [error, setError] = useState<any | undefined>();
+  let url: string | undefined;
+  if (isProviderSelected()) {
+    url = selectedProvider.api_url.endsWith("/") ?
+      selectedProvider.api_url.substring(0, selectedProvider.api_url.length - 1)
+      : selectedProvider.api_url;
   }
   const body = new FormData();
-  data.files && data.files.map((f, i) => body.append(`file${i}`, f, f.name));
+  data.files && data.files.map((f, i) => body.append(`file`, f, `${f.path || f.webkitRelativePath}`));
   data.blobs && data.blobs.map((b, i) => body.append(`blob${i}`, b.blob, b.name));
-  const url = selectedProvider.api_url.endsWith("/") ?
-    selectedProvider.api_url.substring(0, selectedProvider.api_url.length - 1)
-    : selectedProvider.api_url;
-  axios({
-    method: 'post',
-    baseURL: url,
-    url: data.wrapInDir ? "/upload_dir" : "/upload",
-    onUploadProgress: (e) => {
-      data.setProgress && data.setProgress(parseInt(`${(e.loaded / e.total) * 100}`));
-    },
-    data: body
-  }).then((res) => {
-    if (res.status === 200) data.setResponse(res.data);
-    else {
-      data.setError && data.setError(res)
-      toast.error("Failed to upload")
+  const upload = useCallback((cancelToken: CancelToken) => {
+    // console.log(data.files);
+    setResponse(undefined)
+    setError(undefined)
+    if (url === undefined) {
+      toast.error("Failed to upload, Hosq provider is not available")
+      return
     }
-  })
+    axios({
+      method: 'post',
+      baseURL: url,
+      url: data.wrapInDir ? "/upload_dir" : "/upload",
+      onUploadProgress: (e) => {
+        setProgress(parseInt(`${(e.loaded / e.total) * 100}`));
+      },
+      data: body,
+      cancelToken
+    }).then((res) => {
+      if (res.status === 200) {
+        if (typeof res.data === 'string') {
+          try {
+            const val = res.data.split('\n');
+            if (val[val.length - 1] === '') val.pop();
+            setResponse(JSON.parse(val[val.length - 1]));
+          } catch (e) {
+            console.error(e);
+            setError(res)
+          }
+          return
+        }
+        setResponse(res.data);
+      }
+      else {
+        setError(res)
+        toast.error("Failed to upload")
+      }
+    }).catch((e) => {
+      setError(e)
+    })
+  }, [body]);
+
+  return { response, error, progress, upload }
 }
 
 export function HosqUploadFiles(props: HosqUploadFilesProps) {
   const [files, setFiles] = useState<File[]>([]);
-  const [progress, setProgress] = useState(0);
-  const [response, setResponse] = useState<any | undefined>();
+  const { response, progress, error, upload } = useHosqUpload({ files, wrapInDir: props.wrapInDir })
+  // const [progress, setProgress] = useState(0);
+  // const [response, setResponse] = useState<any | undefined>();
   const fileSpan: any = useRef();
   const isMobile = useIsMobile();
   useEffect(() => {
@@ -150,11 +180,18 @@ export function HosqUploadFiles(props: HosqUploadFilesProps) {
     if (files.length === 1) { name = files[0].name, size = files[0].size }
     else {
       name = `${files.length} files`
-      files.map((f) => size += f.size);
+      files.forEach((f) => size += f.size);
     }
     fileSpan.current.innerHTML = `${name}  <span class="as-text-bold">${(size / 1e6).toFixed(2)} MiB</span>`
-    setResponse(undefined)
-    hosqUpload({ files, wrapInDir: files.length > 1, setProgress, setResponse });
+    props.onDrop && props.onDrop(files);
+    const token = axios.CancelToken;
+    const source = token.source();
+    if (props.uploadOnDrop) {
+      upload(source.token);
+    }
+    return () => {
+      props.uploadOnDrop && source.cancel()
+    }
   }, [files])
   return (
     <div className={hosqStyles.hosq_upload_div}>
@@ -178,7 +215,7 @@ export function HosqUploadFiles(props: HosqUploadFilesProps) {
       <div className={[hosqStyles.div_space_between, hosqStyles.fill_width].join(" ")}>
         <span ref={fileSpan} className="as-text-secondary as-text-size-n">Noting selected</span>
         {
-          files.length > 0 && !response ?
+          files.length > 0 && !response && props.uploadOnDrop && !error ?
             <CircularProgress size="30px" thickness={10} isIndeterminate={progress === 100}
               value={progress} color="var(--as-primary)">
               <CircularProgressLabel>{progress}%</CircularProgressLabel>

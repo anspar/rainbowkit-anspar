@@ -16,7 +16,9 @@ const Template: ComponentStory<typeof WalletContext> = (args) => {
     <>
       <ThemeSwitch style={{width: "30px"}}/>
       <WalletContext {...args} >
-        <Wallet />
+        <div style={{display: 'flex', width:'100%', justifyContent: 'center', alignItems:'center'}}>
+          <Wallet />
+        </div>
       </WalletContext>
     </>
   )

@@ -5,8 +5,9 @@ import ans_abis from "./abis/ans_abis.json";
 import hosq_abis from "./abis/hosq_abis.json";
 
 const useANSWrite = (chainId: number, functionName: string, args: any[], overrides?: CallOverrides) => {
+    const nets: Record<string, string> = ans_abis.ans.networks;
     return useContractWrite({
-        addressOrName: ans_abis.ans.networks[`${chainId}`],
+        addressOrName: nets[`${chainId}`],
         contractInterface: ans_abis.ans.abi,
         functionName,
         args,
@@ -16,8 +17,9 @@ const useANSWrite = (chainId: number, functionName: string, args: any[], overrid
 }
 
 const useANS1155Write = (chainId: number, functionName: string, args: any[], overrides?: CallOverrides) => {
+    const nets: Record<string, string> = ans_abis.a1155.networks
     return useContractWrite({
-        addressOrName: ans_abis.a1155.networks[`${chainId}`],
+        addressOrName: nets[`${chainId}`],
         contractInterface: ans_abis.a1155.abi,
         functionName,
         args,
@@ -27,8 +29,9 @@ const useANS1155Write = (chainId: number, functionName: string, args: any[], ove
 }
 
 const useHosqWrite = (chainId: number, functionName: string, args: any[], overrides?: CallOverrides) => {
+    const nets: Record<string, string> = hosq_abis.hosq.networks
     return useContractWrite({
-        addressOrName: hosq_abis.hosq.networks[`${chainId}`],
+        addressOrName: nets[`${chainId}`],
         contractInterface: hosq_abis.hosq.abi,
         functionName,
         args,
@@ -38,8 +41,9 @@ const useHosqWrite = (chainId: number, functionName: string, args: any[], overri
 }
 
 const useANSRead = (chainId: number, functionName: string, args: any[]) => {
+    const nets: Record<string, string> = ans_abis.ans.networks
     return useContractRead({
-        addressOrName: ans_abis.ans.networks[`${chainId}`],
+        addressOrName: nets[`${chainId}`],
         contractInterface: ans_abis.ans.abi,
         functionName,
         args,
@@ -48,8 +52,9 @@ const useANSRead = (chainId: number, functionName: string, args: any[]) => {
 }
 
 const useANS1155Read = (chainId: number, functionName: string, args: any[]) => {
+    const nets: Record<string, string> = ans_abis.a1155.networks
     return useContractRead({
-        addressOrName: ans_abis.a1155.networks[`${chainId}`],
+        addressOrName: nets[`${chainId}`],
         contractInterface: ans_abis.a1155.abi,
         functionName,
         args,
@@ -58,8 +63,9 @@ const useANS1155Read = (chainId: number, functionName: string, args: any[]) => {
 }
 
 const useHosqRead = (chainId: number, functionName: string, args: any[]) => {
+    const nets: Record<string, string> = hosq_abis.hosq.networks
     return useContractRead({
-        addressOrName: hosq_abis.hosq.networks[`${chainId}`],
+        addressOrName: nets[`${chainId}`],
         contractInterface: hosq_abis.hosq.abi,
         functionName,
         args,
@@ -67,7 +73,7 @@ const useHosqRead = (chainId: number, functionName: string, args: any[]) => {
     })
 }
 
-const useIsMobile=()=>{
+const useIsMobile = () => {
     return useMediaQuery({ maxWidth: 767 });
 }
 

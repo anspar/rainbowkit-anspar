@@ -4,8 +4,8 @@
     align-items: center;
     cursor: pointer;
     min-height: 2.2rem;
-    margin-right: 0.7rem;
-    border-radius: 0.7rem;
+    margin-right: 12px;
+    border-radius: 1rem;
     padding: 2px 5px;
     max-width: 100px;
 }
