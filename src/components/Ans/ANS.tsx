@@ -34,8 +34,8 @@ function ANSElem() {
 }
 
 function ANSConnector(props: ANSConnectorProps) {
-  const { chain, chains } = useNetwork()
-  const { data, isError, isLoading } = useANSRead(chain?.id as number, "get_default", [props.address]);
+  const { chain } = useNetwork()
+  const { data, isError } = useANSRead(chain?.id as number, "get_default", [props.address]);
   const [ready, setReady] = useState(false);
   useEffect(() => {
     isError && toast.error(`Failed to get Default ANS for ${props.address}`);
@@ -54,7 +54,7 @@ export function getSelectedANS() {
   return selectedANS
 }
 
-export function ANS({}) {
+export function ANS() {
   const { address } = useAccount();
   return (
     address ?

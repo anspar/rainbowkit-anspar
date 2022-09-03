@@ -30,7 +30,7 @@ export interface HosqUploadFilesProps {
   allowPinning?: boolean,
   wrapInDir?: boolean,
   uploadOnDrop?: boolean,
-  onDrop?: (f: File[]) => {}
+  onDrop?: (f: File[]) => void
 }
 
 let selectedProvider: any | undefined;
@@ -120,10 +120,10 @@ export function useHosqUpload(data: HosqUploadProps) {
       selectedProvider.api_url.substring(0, selectedProvider.api_url.length - 1)
       : selectedProvider.api_url;
   }
-  const body = new FormData();
-  data.files && data.files.map((f, i) => body.append(`file`, f, `${f.path || f.webkitRelativePath}`));
-  data.blobs && data.blobs.map((b, i) => body.append(`blob${i}`, b.blob, b.name));
   const upload = useCallback((cancelToken: CancelToken) => {
+    const body = new FormData();
+    data.files && data.files.map((f, i) => body.append(`file`, f, `${f.path || f.webkitRelativePath}`));
+    data.blobs && data.blobs.map((b, i) => body.append(`blob${i}`, b.blob, b.name));
     // console.log(data.files);
     setResponse(undefined)
     setError(undefined)
@@ -162,7 +162,7 @@ export function useHosqUpload(data: HosqUploadProps) {
     }).catch((e) => {
       setError(e)
     })
-  }, [body]);
+  }, [data.files, data.blobs, data.wrapInDir]);
 
   return { response, error, progress, upload }
 }
@@ -170,8 +170,6 @@ export function useHosqUpload(data: HosqUploadProps) {
 export function HosqUploadFiles(props: HosqUploadFilesProps) {
   const [files, setFiles] = useState<File[]>([]);
   const { response, progress, error, upload } = useHosqUpload({ files, wrapInDir: props.wrapInDir })
-  // const [progress, setProgress] = useState(0);
-  // const [response, setResponse] = useState<any | undefined>();
   const fileSpan: any = useRef();
   const isMobile = useIsMobile();
   useEffect(() => {
