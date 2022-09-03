@@ -4,7 +4,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    background-color: var(--as-dark-dim);
+    background-color: var(--as-primary-dim);
     border-radius: 1rem;
     border-style: none;
     width: 100%;
@@ -48,7 +48,7 @@
     border-radius: 1rem;
     border-color: var(--as-primary);
     border-style: dashed;
-    background-color: var(--as-dark-dim);
+    background-color: var(--as-light);
     color: var(--as-dark);
     outline: none;
     transition: border .24s ease-in-out;

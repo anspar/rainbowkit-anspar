@@ -1,42 +1,41 @@
-import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
-import Dropzone from "react-dropzone";
-import { toast } from "react-toastify";
-import { useNetwork } from "wagmi";
-import { CircularProgress, CircularProgressLabel } from "@chakra-ui/progress";
-import axios, { CancelToken } from "axios";
-import { ethers } from "ethers";
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import Dropzone from 'react-dropzone'
+import { toast } from 'react-toastify'
+import { useNetwork } from 'wagmi'
+import { CircularProgress, CircularProgressLabel } from '@chakra-ui/progress'
+import axios, { CancelToken } from 'axios'
+import { ethers } from 'ethers'
 
-import { useHosqRead, useHosqWrite, useIsMobile } from "../utils/hooks";
-import hosqStyles from "./Hosq.modules.css";
-import blockTimes from "../utils/blockTimes";
+import { useHosqRead, useHosqWrite, useIsMobile } from '../utils/hooks'
+import hosqStyles from './Hosq.modules.css'
+import blockTimes from '../utils/blockTimes'
 
 // const blockTimes = require("../utils/blockTimes.json");
 
-
 export interface HosqProviderProps {
-  children: ReactNode;
-  DefaultProviderId?: number;
+  children: ReactNode
+  DefaultProviderId?: number
 }
 
 export interface HosqUploadProps {
-  files?: File[],
-  blobs?: [{ blob: Blob, name: string }],
+  files?: File[]
+  blobs?: [{ blob: Blob, name: string }]
   wrapInDir?: boolean
 }
 
 export interface HosqUploadFilesProps {
-  maxFiles?: number,
-  accept?: any,
-  allowPinning?: boolean,
-  wrapInDir?: boolean,
-  uploadOnDrop?: boolean,
+  maxFiles?: number
+  accept?: any
+  allowPinning?: boolean
+  wrapInDir?: boolean
+  uploadOnDrop?: boolean
   onDrop?: (f: File[]) => void
 }
 
-let selectedProvider: any | undefined;
-let selectedProviderId: number = 0;
+let selectedProvider: any | undefined
+let selectedProviderId: number = 0
 
-function FileUploadComponent({ callback, ...props }: any) {
+function FileUploadComponent ({ callback, ...props }: any) {
   return (
     <Dropzone preventDropOnDocument
       onDropAccepted={acceptedFiles => callback(acceptedFiles)}
@@ -44,10 +43,9 @@ function FileUploadComponent({ callback, ...props }: any) {
       {({ getRootProps, getInputProps, isFocused, isDragAccept, isDragReject }) => (
         <div className={hosqStyles.container} {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
           <input {...getInputProps()} />
-          {isDragAccept ?
-            <p className="as-text-secondary">Drop</p>
-            :
-            <p className="as-text-secondary">Drag 'n' drop {props.maxFiles === 1 ? "a file" : "some files"} here, or click to select</p>
+          {isDragAccept
+            ? <p>Drop</p>
+            : <p>Drag 'n' drop {props.maxFiles === 1 ? 'a file' : 'some files'} here, or click to select</p>
           }
         </div>
       )}
@@ -55,44 +53,44 @@ function FileUploadComponent({ callback, ...props }: any) {
   )
 }
 
-function PinButton(props: { blocks: number, cid: string, chainId: number, symbol?: string }) {
-  const { data, isError, error, isLoading, write, fees } = useHosqPin(props.cid, props.blocks, selectedProviderId, props.chainId)
-  const fee = fees.data ? fees.data[0].add(fees.data[1]).toString() : "0"
+function PinButton (props: { blocks: number, cid: string, chainId: number, symbol?: string }) {
+  const { isError, error, isLoading, write, fees } = useHosqPin(props.cid, props.blocks, selectedProviderId, props.chainId)
+  const fee = (fees.data != null) ? fees.data[0].add(fees.data[1]).toString() : '0'
   // console.log(data, isError, isLoading, ethers.utils.formatEther(fee));
-  const feeErr = () => { console.error(fees.error); toast.error("Error getting the provider fee") }
-  fees.isError && feeErr();
-  const pinErr = () => { console.error(error); toast.error("Error submitting pinning request") }
+  const feeErr = () => { console.error(fees.error); toast.error('Error getting the provider fee') }
+  fees.isError && feeErr()
+  const pinErr = () => { console.error(error); toast.error('Error submitting pinning request') }
   isError && pinErr()
   return (
     <div className={hosqStyles.div_flex_column}>
-      <span className={`as-text-size-xs as-text-secondary as-text-bold ${fees.isLoading ? 'as-loading' : ""}`}>
-        Fee {props.symbol || "?"} {ethers.utils.formatEther(fee)}
+      <span className={`as-text-size-xs as-text-bold ${fees.isLoading ? 'as-loading' : ''}`}>
+        Fee {props.symbol || '?'} {ethers.utils.formatEther(fee)}
       </span>
-      <span className={[`as-btn-primary as-pointer as-shadow-sm ${hosqStyles.text_center} ${isLoading ? 'as-loading' : ""}`,
-      hosqStyles.border1rem, hosqStyles.fill_width].join(" ")}
-        onClick={() => write()} style={{ minWidth: "102px" }}>Pin CID</span>
+      <span className={[`as-btn-primary as-pointer as-shadow-sm ${hosqStyles.text_center} ${isLoading ? 'as-loading' : ''}`,
+        hosqStyles.border1rem, hosqStyles.fill_width].join(' ')}
+        onClick={() => write()} style={{ minWidth: '102px' }}>Pin CID</span>
     </div>
   )
 }
 
-function HosqPin(props: { cid: string }) {
+function HosqPin (props: { cid: string }) {
   // const [blocks, setBlocks] = useState(1);
-  const dateInput = useRef<any>();
-  const [date, setDate] = useState(new Date(new Date().getTime() + (7 * 86400 * 1000)));
-  const { chain, chains } = useNetwork();
+  const dateInput = useRef<any>()
+  const [date, setDate] = useState(new Date(new Date().getTime() + (7 * 86400 * 1000)))
+  const { chain } = useNetwork()
   const blocks = Math.round(((date.getTime() - new Date().getTime()) / 1000) / blockTimes[chain?.id as number])
   // console.log(blocks);
   useEffect(() => {
-    dateInput.current.value = date.toISOString().substring(0, 10);
-    dateInput.current.min = new Date().toISOString().substring(0, 10);
+    dateInput.current.value = date.toISOString().substring(0, 10)
+    dateInput.current.min = new Date().toISOString().substring(0, 10)
   }, [])
   return (
-    <div className={[hosqStyles.div_space_between, hosqStyles.fill_width].join(" ")}>
+    <div className={[hosqStyles.div_space_between, hosqStyles.fill_width].join(' ')}>
       <div className={hosqStyles.div_flex_column}>
-        <span className="as-text-size-xs as-text-secondary as-text-bold">
+        <span className="as-text-size-xs as-text-bold">
           Select expiration date
         </span>
-        <input className={[hosqStyles.border1rem, "as-text-dark as-bg-light as-shadow-sm"].join(" ")}
+        <input className={[hosqStyles.border1rem, 'as-text-dark as-bg-light as-shadow-sm'].join(' ')}
           type="date" ref={dateInput} onChange={(e) => { setDate(new Date(e.target.value)) }} />
       </div>
       <PinButton blocks={blocks} cid={props.cid} chainId={chain?.id as number} symbol={chain?.nativeCurrency?.symbol} />
@@ -100,43 +98,43 @@ function HosqPin(props: { cid: string }) {
   )
 }
 
-export function useHosqPin(cid: string, numberOfBlocks: number, providerId: number, chain: number) {
-  const fees = useHosqRead(chain, "get_total_price_for_blocks", [numberOfBlocks, providerId]);
-  const write = useHosqWrite(chain, "add_new_valid_block", [cid, numberOfBlocks, providerId],
-    { value: fees.data ? fees.data[0].add(fees.data[1]).toString() : "0" })
+export function useHosqPin (cid: string, numberOfBlocks: number, providerId: number, chain: number) {
+  const fees = useHosqRead(chain, 'get_total_price_for_blocks', [numberOfBlocks, providerId])
+  const write = useHosqWrite(chain, 'add_new_valid_block', [cid, numberOfBlocks, providerId],
+    { value: (fees.data != null) ? fees.data[0].add(fees.data[1]).toString() : '0' })
   return {
     ...write,
     fees
   }
 }
 
-export function useHosqUpload(data: HosqUploadProps) {
-  const [progress, setProgress] = useState(0);
-  const [response, setResponse] = useState<any | undefined>();
-  const [error, setError] = useState<any | undefined>();
-  let url: string | undefined;
+export function useHosqUpload (data: HosqUploadProps) {
+  const [progress, setProgress] = useState(0)
+  const [response, setResponse] = useState<any | undefined>()
+  const [error, setError] = useState<any | undefined>()
+  let url: string | undefined
   if (isProviderSelected()) {
-    url = selectedProvider.api_url.endsWith("/") ?
-      selectedProvider.api_url.substring(0, selectedProvider.api_url.length - 1)
-      : selectedProvider.api_url;
+    url = selectedProvider.api_url.endsWith('/')
+      ? selectedProvider.api_url.substring(0, selectedProvider.api_url.length - 1)
+      : selectedProvider.api_url
   }
   const upload = useCallback((cancelToken: CancelToken) => {
-    const body = new FormData();
-    data.files && data.files.map((f, i) => body.append(`file`, f, `${f.path || f.webkitRelativePath}`));
-    data.blobs && data.blobs.map((b, i) => body.append(`blob${i}`, b.blob, b.name));
+    const body = new FormData()
+    data.files !== undefined && data.files?.map((f) => body.append('file', f, `${f.path || f.webkitRelativePath}`))
+    data.blobs !== undefined && data.blobs?.map((b, i) => body.append(`blob${i}`, b.blob, b.name))
     // console.log(data.files);
     setResponse(undefined)
     setError(undefined)
     if (url === undefined) {
-      toast.error("Failed to upload, Hosq provider is not available")
+      toast.error('Failed to upload, Hosq provider is not available')
       return
     }
     axios({
       method: 'post',
       baseURL: url,
-      url: data.wrapInDir ? "/upload_dir" : "/upload",
+      url: data.wrapInDir ? '/upload_dir' : '/upload',
       onUploadProgress: (e) => {
-        setProgress(parseInt(`${(e.loaded / e.total) * 100}`));
+        setProgress(parseInt(`${(e.loaded / e.total) * 100}`))
       },
       data: body,
       cancelToken
@@ -144,48 +142,46 @@ export function useHosqUpload(data: HosqUploadProps) {
       if (res.status === 200) {
         if (typeof res.data === 'string') {
           try {
-            const val = res.data.split('\n');
-            if (val[val.length - 1] === '') val.pop();
-            setResponse(JSON.parse(val[val.length - 1]));
+            const val = res.data.split('\n')
+            if (val[val.length - 1] === '') val.pop()
+            setResponse(JSON.parse(val[val.length - 1]))
           } catch (e) {
-            console.error(e);
+            console.error(e)
             setError(res)
           }
           return
         }
-        setResponse(res.data);
-      }
-      else {
+        setResponse(res.data)
+      } else {
         setError(res)
-        toast.error("Failed to upload")
+        toast.error('Failed to upload')
       }
     }).catch((e) => {
       setError(e)
     })
-  }, [data.files, data.blobs, data.wrapInDir]);
+  }, [data.files, data.blobs, data.wrapInDir])
 
   return { response, error, progress, upload }
 }
 
-export function HosqUploadFiles(props: HosqUploadFilesProps) {
-  const [files, setFiles] = useState<File[]>([]);
+export function HosqUploadFiles (props: HosqUploadFilesProps) {
+  const [files, setFiles] = useState<File[]>([])
   const { response, progress, error, upload } = useHosqUpload({ files, wrapInDir: props.wrapInDir })
-  const fileSpan: any = useRef();
-  const isMobile = useIsMobile();
+  const fileSpan: any = useRef()
+  const isMobile = useIsMobile()
   useEffect(() => {
-    if (files.length === 0) return;
-    let [name, size] = ["", 0];
-    if (files.length === 1) { name = files[0].name, size = files[0].size }
-    else {
+    if (files.length === 0) return
+    let [name, size] = ['', 0]
+    if (files.length === 1) { name = files[0].name, size = files[0].size } else {
       name = `${files.length} files`
-      files.forEach((f) => size += f.size);
+      files.forEach((f) => size += f.size)
     }
     fileSpan.current.innerHTML = `${name}  <span class="as-text-bold">${(size / 1e6).toFixed(2)} MiB</span>`
-    props.onDrop && props.onDrop(files);
-    const token = axios.CancelToken;
-    const source = token.source();
+    ;(props.onDrop != null) && props.onDrop(files)
+    const token = axios.CancelToken
+    const source = token.source()
     if (props.uploadOnDrop) {
-      upload(source.token);
+      upload(source.token)
     }
     return () => {
       props.uploadOnDrop && source.cancel()
@@ -194,91 +190,86 @@ export function HosqUploadFiles(props: HosqUploadFilesProps) {
   return (
     <div className={hosqStyles.hosq_upload_div}>
       {
-        response ?
-          <div className={`${hosqStyles.div_flex_column} ${hosqStyles.fill_width}`}>
-            <a target='_blank' href={`${getGateway()}/${response.Hash}`} className="as-text-secondary as-text-size-n">
-              {isMobile ? `${response.Hash.substring(0, 30)}...` : response.Hash}
-            </a>
-            {
-              props.allowPinning ?
-                <HosqPin cid={response.Hash} />
-                : <></>
-            }
-          </div>
-          : <></>
+        response !== undefined &&
+        <div className={`${hosqStyles.div_flex_column} ${hosqStyles.fill_width}`}>
+          <a target='_blank' href={`${getGateway()}/${response.Hash}`} className="as-text-size-n" rel="noreferrer">
+            {isMobile ? `${response.Hash.substring(0, 30)}...` : response.Hash}
+          </a>
+          {
+            props.allowPinning && <HosqPin cid={response.Hash} />
+          }
+        </div>
       }
 
       <FileUploadComponent callback={setFiles} maxFiles={props.maxFiles} accept={props.accept} />
 
-      <div className={[hosqStyles.div_space_between, hosqStyles.fill_width].join(" ")}>
-        <span ref={fileSpan} className="as-text-secondary as-text-size-n">Noting selected</span>
+      <div className={[hosqStyles.div_space_between, hosqStyles.fill_width].join(' ')}>
+        <span ref={fileSpan} className="as-text-size-n">Noting selected</span>
         {
-          files.length > 0 && !response && props.uploadOnDrop && !error ?
-            <CircularProgress size="30px" thickness={10} isIndeterminate={progress === 100}
-              value={progress} color="var(--as-primary)">
-              <CircularProgressLabel>{progress}%</CircularProgressLabel>
-            </CircularProgress>
-            :
-            <></>
+          (files.length > 0 && !response && props.uploadOnDrop && !error) &&
+          <CircularProgress size="30px" thickness={10} isIndeterminate={progress === 100}
+            value={progress} color="var(--as-primary)">
+            <CircularProgressLabel>{progress}%</CircularProgressLabel>
+          </CircularProgress>
         }
       </div>
     </div>
   )
 }
 
-export function isProviderSelected() {
+export function isProviderSelected () {
   return selectedProvider !== undefined
 }
 
-export function useGet(cid: string, json: boolean = false) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState<any | undefined>();
-  const [error, setError] = useState<any | undefined>();
+export function useGet (cid: string, json: boolean = false) {
+  const [isLoading, setIsLoading] = useState(false)
+  const [data, setData] = useState<any | undefined>()
+  const [error, setError] = useState<any | undefined>()
   useEffect(() => {
     if (!isProviderSelected()) {
-      setError("Provider is not available");
+      setError('Provider is not available')
       return
     }
     setIsLoading(true)
     fetch(`${selectedProvider.api_url}/gateway/${cid}`).then(async (res) => {
-      setIsLoading(false);
+      setIsLoading(false)
       if (res.status !== 200) {
-        console.error(res);
-        setError(res.status);
+        console.error(res)
+        setError(res.status)
         toast.error(`Failed to request data from '${selectedProvider.name}' provider`)
         return
       }
       setData(json ? (await res.json()) : res)
     }).catch((e) => {
-      console.error(e);
-      setIsLoading(false);
+      console.error(e)
+      setIsLoading(false)
       setError(e)
-    });
+    })
   }, [])
   return { data, error, isLoading }
 }
 
-export function getGateway() {
-  if (!isProviderSelected()) return;
+export function getGateway () {
+  if (!isProviderSelected()) return ''
   return `${selectedProvider.api_url}/gateway`
 }
 
-export function HosqProvider({ children, ...props }: HosqProviderProps) {
-  const { chain, chains } = useNetwork()
-  const { data, isError, isLoading } = useHosqRead(chain?.id as number, "get_provider_details", [
+export function HosqProvider ({ children, ...props }: HosqProviderProps) {
+  const { chain } = useNetwork()
+  const { data, isError } = useHosqRead(chain?.id as number, 'get_provider_details', [
     props.DefaultProviderId ? props.DefaultProviderId : 1
-  ]);
-  const [ready, setReady] = useState(false);
+  ])
+  const [ready, setReady] = useState(false)
   useEffect(() => {
-    isError && toast.error("Failed to get Hosq provider");
-    if (data) {
-      selectedProvider = data;
-      selectedProviderId = props.DefaultProviderId ? props.DefaultProviderId : 1;
-      setReady(true);
+    isError && toast.error('Failed to get Hosq provider')
+    if (data != null) {
+      selectedProvider = data
+      selectedProviderId = props.DefaultProviderId ? props.DefaultProviderId : 1
+      setReady(true)
       return
     }
-    setReady(false);
-  }, [data]);
+    setReady(false)
+  }, [data])
 
   return (
     ready ? <>{children}</> : <></>
