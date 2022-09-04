@@ -19,7 +19,7 @@ export interface HosqProviderProps {
 
 export interface HosqUploadProps {
   files?: File[]
-  blobs?: [{ blob: Blob, name: string }]
+  blobs?: { blob: Blob, name: string }[]
   wrapInDir?: boolean
 }
 
@@ -121,7 +121,7 @@ export function useHosqUpload (data: HosqUploadProps) {
   const upload = useCallback((cancelToken: CancelToken) => {
     const body = new FormData()
     data.files !== undefined && data.files?.map((f) => body.append('file', f, `${f.path || f.webkitRelativePath}`))
-    data.blobs !== undefined && data.blobs?.map((b, i) => body.append(`blob${i}`, b.blob, b.name))
+    data.blobs !== undefined && data.blobs?.map((b, i) => body.append(`file`, b.blob, b.name))
     // console.log(data.files);
     setResponse(undefined)
     setError(undefined)
