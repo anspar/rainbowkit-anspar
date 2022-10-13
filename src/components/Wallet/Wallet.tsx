@@ -4,10 +4,10 @@ import {
   RainbowKitProvider,
   ConnectButton,
   connectorsForWallets,
-  wallet,
   lightTheme,
   DisclaimerComponent,
 } from '@rainbow-me/rainbowkit';
+import { injectedWallet } from '@rainbow-me/rainbowkit/wallets'
 import {
   Chain,
   chain,
@@ -49,7 +49,7 @@ export function WalletContext(props: WalletProps) {
     {
       groupName: 'Recommended',
       wallets: [
-        wallet.metaMask({ chains })
+        injectedWallet({ chains })
       ],
     },
   ]);
@@ -105,8 +105,5 @@ export function Wallet() {
     <ConnectButton showBalance={false}
       chainStatus={{ smallScreen: 'icon', largeScreen: 'full' }}
       accountStatus={{ smallScreen: 'avatar', largeScreen: "full" }} />
-    // <div style={{ display: "flex", justifyContent: "center", alignItems: "center", ...props.styles }} className={props.className}>
-      // {/* <ANS /> */}
-    // </div>
   )
 }
