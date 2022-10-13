@@ -1,1 +1,0 @@
-(self.webpackChunk_anspar_ans_wallet=self.webpackChunk_anspar_ans_wallet||[]).push([[563],{"?a449":()=>{}}]);

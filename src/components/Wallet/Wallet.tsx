@@ -17,7 +17,6 @@ import {
 } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
-import { ANS } from "../Ans/ANS";
 import { ToastContainer } from 'react-toastify';
 
 export interface WalletProps {
@@ -101,13 +100,13 @@ export function WalletContext(props: WalletProps) {
   );
 }
 
-export function Wallet(props: { className?: string, styles?: React.CSSProperties }) {
+export function Wallet() {
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", ...props.styles }} className={props.className}>
-      <ANS />
-      <ConnectButton showBalance={false}
-        chainStatus={{ smallScreen: 'icon', largeScreen: 'full' }}
-        accountStatus={{ smallScreen: 'avatar', largeScreen: "full" }} />
-    </div>
+    <ConnectButton showBalance={false}
+      chainStatus={{ smallScreen: 'icon', largeScreen: 'full' }}
+      accountStatus={{ smallScreen: 'avatar', largeScreen: "full" }} />
+    // <div style={{ display: "flex", justifyContent: "center", alignItems: "center", ...props.styles }} className={props.className}>
+      // {/* <ANS /> */}
+    // </div>
   )
 }

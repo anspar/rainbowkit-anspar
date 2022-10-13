@@ -1,10 +1,10 @@
 {
-  "name": "@anspar/ans-wallet",
+  "name": "@anspar/rainbowkit-anspar",
   "version": "0.1.0",
-  "description": "Anspar namespace react component wallet",
+  "description": "rainbowkit Anspar theme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anspar/ans-wallet.git"
+    "url": "git+https://github.com/anspar/rainbowkit-anspar.git"
   },
   "scripts": {
     "rollup": "rollup -c",
@@ -67,10 +67,7 @@
   },
   "peerDependencies": {
     "@anspar/anspar-theme": "^0.2.20",
-    "@chakra-ui/progress": "^2.0.5",
     "@rainbow-me/rainbowkit": "^0.5.0",
-    "axios": "^0.27.2",
-    "ethers": "^5.6.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.2",
