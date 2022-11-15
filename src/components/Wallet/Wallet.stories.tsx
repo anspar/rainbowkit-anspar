@@ -26,6 +26,11 @@ const Template: ComponentStory<typeof WalletContext> = (args) => {
 
 export const Default = Template.bind({});
 
+export const NoTheme = Template.bind({});
+NoTheme.args = {
+  noTheme: true
+}
+
 export const Testnets = Template.bind({});
 Testnets.args = {
   testnets: true,

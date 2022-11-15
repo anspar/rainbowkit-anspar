@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import "./Wallet.css";
 import {
   RainbowKitProvider,
   ConnectButton,
@@ -17,7 +16,6 @@ import {
 } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
-import { ToastContainer } from 'react-toastify';
 
 export interface WalletProps {
   alchemyKey?: string;
@@ -29,7 +27,8 @@ export interface WalletProps {
     appName?: string;
     learnMoreUrl?: string;
     disclaimer?: DisclaimerComponent;
-  }
+  },
+  noTheme?: boolean
 }
 
 export function WalletContext(props: WalletProps) {
@@ -59,6 +58,7 @@ export function WalletContext(props: WalletProps) {
     connectors,
     provider
   })
+
   let theme = lightTheme({
     accentColor: 'var(--as-light)',
     accentColorForeground: 'var(--as-dark)'
@@ -91,12 +91,12 @@ export function WalletContext(props: WalletProps) {
     modalMobile: '1rem',
   }
 
-  return (<WagmiConfig client={wagmiClient}>
-    <RainbowKitProvider chains={chains} theme={theme} appInfo={props.appInfo}>
-      {props.children}
-      <ToastContainer autoClose={5000} pauseOnHover closeOnClick newestOnTop={true} position="bottom-center" />
-    </RainbowKitProvider>
-  </WagmiConfig>
+  return (
+    <WagmiConfig client={wagmiClient}>
+      <RainbowKitProvider chains={chains} theme={props.noTheme? undefined : theme} appInfo={props.appInfo}>
+        {props.children}
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 }
 
