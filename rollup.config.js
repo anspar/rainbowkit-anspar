@@ -1,32 +1,31 @@
-import {nodeResolve} from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
-import postcss from "rollup-plugin-postcss";
-import del from "rollup-plugin-delete";
-import json from '@rollup/plugin-json';
-import peerDepsExternal from 'rollup-plugin-peer-deps-external';
-import typescript from "@rollup/plugin-typescript";
-// import dts from "rollup-plugin-dts";
-import image from 'rollup-plugin-img';
-// import copy from 'rollup-plugin-copy';
+import { nodeResolve } from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
+import postcss from 'rollup-plugin-postcss'
+import del from 'rollup-plugin-delete'
+import json from '@rollup/plugin-json'
+import peerDepsExternal from 'rollup-plugin-peer-deps-external'
+import typescript from '@rollup/plugin-typescript'
+import image from 'rollup-plugin-img'
+import terser from '@rollup/plugin-terser'
 
-const packageJson = require("./package.json");
+const packageJson = require('./package.json')
 
 export default [
   {
-    input: "src/index.ts",
+    input: 'src/index.ts',
     output: [
       {
         file: packageJson.main,
-        format: "esm",
-        sourcemap: true,
-      },
+        format: 'esm',
+        sourcemap: true
+      }
     ],
     plugins: [
       del({ targets: 'dist/*' }),
       peerDepsExternal(),
       nodeResolve(),
       commonjs(),
-      typescript({ tsconfig: "./tsconfig.json" }),
+      typescript({ tsconfig: './tsconfig.json' }),
       json(),
       postcss({
         minimize: true,
@@ -34,11 +33,12 @@ export default [
         extensions: ['.css', '.scss']
       }),
       image({
-        output: `dist/images`, // default the root
+        output: 'dist/images', // default the root
         extensions: /\.(png|jpg|jpeg|gif|svg)$/, // support png|jpg|jpeg|gif|svg, and it's alse the default value
-        limit: 8192,  // default 8192(8k)
+        limit: 8192, // default 8192(8k)
         exclude: 'node_modules/**'
-      })
-    ],
+      }),
+      terser()
+    ]
   }
-];
+]

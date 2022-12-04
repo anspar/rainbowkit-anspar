@@ -1,1 +1,0 @@
-(self.webpackChunk_anspar_rainbowkit_anspar=self.webpackChunk_anspar_rainbowkit_anspar||[]).push([[726],{"?ed1b":()=>{},"?d17e":()=>{}}]);

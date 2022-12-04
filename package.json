@@ -27,6 +27,7 @@
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-terser": "^0.1.0",
     "@rollup/plugin-typescript": "^8.3.0",
     "@storybook/addon-actions": "^6.5.9",
     "@storybook/addon-essentials": "^6.4.22",
@@ -68,11 +69,11 @@
   "peerDependencies": {
     "@anspar/anspar-theme": "^0.2.20",
     "@rainbow-me/rainbowkit": "^0.8.0",
-    "wagmi": "^0.8.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.2",
-    "react-responsive": "^9.0.0-beta.10"
+    "react-responsive": "^9.0.0-beta.10",
+    "wagmi": "^0.8.10"
   },
   "main": "dist/index.mjs",
   "files": [

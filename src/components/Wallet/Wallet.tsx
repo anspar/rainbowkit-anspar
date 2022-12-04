@@ -7,7 +7,7 @@ import {
   lightTheme,
   DisclaimerComponent
 } from '@rainbow-me/rainbowkit'
-import { injectedWallet, metaMaskWallet, coinbaseWallet } from '@rainbow-me/rainbowkit/wallets'
+import { injectedWallet, metaMaskWallet, rainbowWallet, omniWallet, braveWallet, argentWallet } from '@rainbow-me/rainbowkit/wallets'
 import {
   Chain,
   chain,
@@ -50,7 +50,11 @@ export function WalletContext (props: WalletProps) {
       groupName: 'Recommended',
       wallets: [
         metaMaskWallet({ chains }),
-        coinbaseWallet({ appName: props.appInfo?.appName ?? '', chains }),
+        // coinbaseWallet({ appName: props.appInfo?.appName ?? '', chains }),
+        braveWallet({ chains }),
+        rainbowWallet({ chains }),
+        omniWallet({ chains }),
+        argentWallet({ chains }),
         injectedWallet({ chains })
       ]
     }
