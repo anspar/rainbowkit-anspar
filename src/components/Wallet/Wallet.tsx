@@ -9,12 +9,11 @@ import {
 } from '@rainbow-me/rainbowkit'
 import { injectedWallet, metaMaskWallet, rainbowWallet, omniWallet, braveWallet, argentWallet } from '@rainbow-me/rainbowkit/wallets'
 import {
-  Chain,
-  chain,
   configureChains,
   createClient,
   WagmiConfig
 } from 'wagmi'
+import { mainnet, polygon, goerli, polygonMumbai, Chain } from 'wagmi/chains'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 
@@ -33,12 +32,12 @@ export interface WalletProps {
 }
 
 export function WalletContext (props: WalletProps) {
-  let nets = [chain.mainnet, chain.polygon]
+  let nets = [mainnet, polygon]
   const providers = [publicProvider()]
   if ((props.alchemyKey ?? '').length > 0) providers.push(alchemyProvider({ apiKey: props.alchemyKey }))
   if (props.testnets ?? false) {
     const customChains = props.customTestChains ?? []
-    nets = [chain.goerli, chain.polygonMumbai, ...customChains]
+    nets = [goerli, polygonMumbai, ...customChains]
   }
   const { chains, provider } = configureChains(
     nets,

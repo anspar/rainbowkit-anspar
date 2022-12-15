@@ -1,20 +1,20 @@
-import React from 'react';
+import React from 'react'
 
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentStory, ComponentMeta } from '@storybook/react'
 
-import { Wallet, WalletContext } from './Wallet';
+import { Wallet, WalletContext } from './Wallet'
 
-import { ThemeSwitch } from '@anspar/anspar-theme';
+import { ThemeSwitch } from '@anspar/anspar-theme'
 
 export default {
   title: 'Wallet/WalletContext',
-  component: WalletContext,
-} as ComponentMeta<typeof WalletContext>;
+  component: WalletContext
+} as ComponentMeta<typeof WalletContext>
 
 const Template: ComponentStory<typeof WalletContext> = (args) => {
   return (
     <>
-      <ThemeSwitch style={{ width: "30px" }} />
+      <ThemeSwitch style={{ width: '30px' }} />
       <WalletContext {...args} >
         <div style={{ display: 'flex', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
           <Wallet />
@@ -24,14 +24,14 @@ const Template: ComponentStory<typeof WalletContext> = (args) => {
   )
 }
 
-export const Default = Template.bind({});
+export const Default = Template.bind({})
 
-export const NoTheme = Template.bind({});
+export const NoTheme = Template.bind({})
 NoTheme.args = {
   noTheme: true
 }
 
-export const Testnets = Template.bind({});
+export const Testnets = Template.bind({})
 Testnets.args = {
   testnets: true,
   customTestChains: [{
@@ -41,10 +41,12 @@ Testnets.args = {
     nativeCurrency: {
       decimals: 18,
       name: 'Anspar',
-      symbol: 'AT',
+      symbol: 'AT'
     },
     rpcUrls: {
-      default: 'https://net.anspar.io'
+      default: {
+        http: ['https://net.anspar.io']
+      }
     }
   }]
 }
