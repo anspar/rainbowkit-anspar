@@ -34,7 +34,7 @@ export interface WalletProps {
 export function WalletContext (props: WalletProps) {
   let nets = [mainnet, polygon]
   const providers = [publicProvider()]
-  if ((props.alchemyKey ?? '').length > 0) providers.push(alchemyProvider({ apiKey: props.alchemyKey }))
+  if ((props.alchemyKey ?? '').length > 0) providers.push(alchemyProvider({ apiKey: (props.alchemyKey ?? '') }))
   if (props.testnets ?? false) {
     const customChains = props.customTestChains ?? []
     nets = [goerli, polygonMumbai, ...customChains]
