@@ -70,7 +70,7 @@ export function WalletContext (props: WalletProps) {
     accentColorForeground: 'var(--as-common)' // text
   })
   theme.colors.connectButtonBackground = 'var(--as-secondary)'
-  theme.colors.connectButtonText = 'var(--as-primary)'
+  theme.colors.connectButtonText = 'var(--as-common)'
   theme.colors.modalBackground = 'var(--as-common)'
   theme.colors.modalText = 'var(--as-highlight)'
   theme.colors.modalTextDim = 'var(--as-primary-dim)'
