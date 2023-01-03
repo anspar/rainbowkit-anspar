@@ -66,28 +66,28 @@ export function WalletContext (props: WalletProps) {
   })
 
   const theme = lightTheme({
-    accentColor: 'var(--as-light)',
-    accentColorForeground: 'var(--as-dark)'
+    accentColor: 'var(--as-secondary)', // btn-bg, recent ...
+    accentColorForeground: 'var(--as-common)' // text
   })
-  theme.colors.connectButtonBackground = 'var(--as-light)'
-  theme.colors.connectButtonText = 'var(--as-dark)'
-  theme.colors.modalBackground = 'var(--as-light)'
-  theme.colors.modalText = 'var(--as-dark)'
-  theme.colors.modalTextDim = 'var(--as-dark-dim)'
-  theme.colors.modalTextSecondary = 'var(--as-dark)'
-  theme.colors.closeButtonBackground = 'var(--as-light)'
-  theme.colors.closeButton = 'var(--as-danger)'
+  theme.colors.connectButtonBackground = 'var(--as-secondary)'
+  theme.colors.connectButtonText = 'var(--as-primary)'
+  theme.colors.modalBackground = 'var(--as-common)'
+  theme.colors.modalText = 'var(--as-highlight)'
+  theme.colors.modalTextDim = 'var(--as-primary-dim)'
+  theme.colors.modalTextSecondary = 'var(--as-secondary)'
+  theme.colors.closeButtonBackground = 'var(--as-secondary)'
+  theme.colors.closeButton = 'var(--as-common)'
   theme.colors.menuItemBackground = 'var(--as-primary)'
   theme.colors.actionButtonSecondaryBackground = 'var(--as-primary)'
-  theme.colors.profileAction = 'var(--as-light)'
+  theme.colors.profileAction = 'var(--as-common)'
   theme.colors.profileActionHover = 'var(--as-primary)'
   theme.shadows = {
-    connectButton: (props.shadow ?? false) ? '0px 4px 12px var(--as-dark-dim)' : '0px 0px 0px #00000000',
-    dialog: '0px 8px 32px var(--as-dark-dim)',
-    profileDetailsAction: '0px 2px 6px var(--as-dark-dim)',
-    selectedOption: '0px 2px 6px var(--as-dark-dim)',
-    selectedWallet: '0px 2px 6px var(--as-dark-dim)',
-    walletLogo: '0px 2px 16px var(--as-dark-dim)'
+    connectButton: (props.shadow ?? false) ? '0px 4px 12px var(--as-primary-dim)' : '0px 0px 0px #00000000',
+    dialog: '0px 8px 32px var(--as-primary-dim)',
+    profileDetailsAction: '0px 2px 6px var(--as-primary-dim)',
+    selectedOption: '0px 2px 6px var(--as-primary-dim)',
+    selectedWallet: '0px 2px 6px var(--as-primary-dim)',
+    walletLogo: '0px 2px 16px var(--as-primary-dim)'
   }
   theme.radii = {
     actionButton: '1rem',

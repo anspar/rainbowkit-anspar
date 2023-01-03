@@ -6,6 +6,7 @@ import { Wallet, WalletContext } from './Wallet'
 
 import { ThemeSwitch } from '@anspar/anspar-theme'
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 export default {
   title: 'Wallet/WalletContext',
   component: WalletContext
@@ -16,7 +17,7 @@ const Template: ComponentStory<typeof WalletContext> = (args) => {
     <>
       <ThemeSwitch style={{ width: '30px' }} />
       <WalletContext {...args} >
-        <div style={{ display: 'flex', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ display: 'flex', width: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'var(--as-common)', padding: '10px' }}>
           <Wallet />
         </div>
       </WalletContext>
