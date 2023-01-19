@@ -82,12 +82,12 @@ export function WalletContext (props: WalletProps) {
   theme.colors.profileAction = 'var(--as-common)'
   theme.colors.profileActionHover = 'var(--as-primary)'
   theme.shadows = {
-    connectButton: (props.shadow ?? false) ? '0px 4px 12px var(--as-primary-dim)' : '0px 0px 0px #00000000',
-    dialog: '0px 8px 32px var(--as-primary-dim)',
-    profileDetailsAction: '0px 2px 6px var(--as-primary-dim)',
-    selectedOption: '0px 2px 6px var(--as-primary-dim)',
-    selectedWallet: '0px 2px 6px var(--as-primary-dim)',
-    walletLogo: '0px 2px 16px var(--as-primary-dim)'
+    connectButton: (props.shadow ?? false) ? '0px 4px 12px var(--as-np-out-dark)' : '0px 0px 0px #00000000',
+    dialog: '0px 8px 32px var(--as-secondary-dim)',
+    profileDetailsAction: '0px 2px 6px var(--as-np-out-dark)',
+    selectedOption: '0px 2px 6px var(--as-np-out-dark)',
+    selectedWallet: '0px 2px 6px var(--as-np-out-dark)',
+    walletLogo: '0px 2px 16px var(--as-np-out-dark)'
   }
   theme.radii = {
     actionButton: '1rem',
